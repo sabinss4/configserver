@@ -6,6 +6,6 @@ eureka:
     register-with_eureka: true
     fetch-registry: true
     service-url:
-      deafaultZone: http://eureka-service/eureka/
+      deafaultZone: http://192.168.0.100/eureka/
     instance:
-      hostname: eureka-service
+      hostname: 192.168.0.100
