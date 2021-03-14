@@ -1,7 +1,7 @@
 version: '3'
 services:
   eureka-service: #name of the first service
-      image: 'eurekaservice'
+      image: 'sabinss4/eurekaservice'
       container_name: eureka-service
       restart: always
       volumes:
@@ -13,7 +13,7 @@ services:
           aliases:
             - eureka-service
   api-gateway-service:
-      image: 'cloudapigateway'
+      image: 'sabinss4/cloudapigateway'
       container_name: api-gateway-service
       restart: always
       volumes:
@@ -30,7 +30,7 @@ services:
           aliases:
           - api-gateway-service
   inventory-service:
-      image: 'inventory'
+      image: 'sabinss4/inventory'
       deploy:
         replicas: 2
       container_name: inventory-service
@@ -50,7 +50,7 @@ services:
           aliases:
           - inventory-service
   shoppingcart-service:
-      image: 'shoppingcart'
+      image: 'sabinss4/shoppingcart'
       deploy:
         replicas: 2
       container_name: shoppingcart-service
