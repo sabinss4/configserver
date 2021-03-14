@@ -1,0 +1,76 @@
+version: '3'
+services:
+  eureka-service: #name of the first service
+      image: 'eurekaservice'
+      container_name: eureka-service
+      restart: always
+      volumes:
+        - /opt/workspace/nerdcode/docker/data/logs:/logs:rw
+      ports:
+        - "8761:8761" #specify ports forewarding
+      networks:
+        egrocernetwork:
+          aliases:
+            - eureka-service
+  api-gateway-service:
+      image: 'cloudapigateway'
+      container_name: api-gateway-service
+      restart: always
+      volumes:
+        - /opt/workspace/nerdcode/docker/data/logs:/logs:rw
+      environment:
+        eureka.client.serviceUrl.defaultZone: http://eureka-service:8761/eureka/
+      ports:
+        # both ports must match the port from external_url above
+        - "9191:9191"
+      depends_on:
+        - "eureka-service"
+      networks:
+        egrocernetwork:
+          aliases:
+          - api-gateway-service
+  inventory-service:
+      image: 'inventory'
+      deploy:
+        replicas: 2
+      container_name: inventory-service
+      restart: always
+      volumes:
+        - /opt/workspace/nerdcode/docker/data/logs:/logs:rw
+      environment:
+        eureka.client.serviceUrl.defaultZone: http://eureka-service:8761/eureka/
+      ports:
+        # both ports must match the port from external_url above
+        - "8084:8084"
+      depends_on:
+        - "eureka-service"
+        - "api-gateway-service"
+      networks:
+        egrocernetwork:
+          aliases:
+          - inventory-service
+  shoppingcart-service:
+      image: 'shoppingcart'
+      deploy:
+        replicas: 2
+      container_name: shoppingcart-service
+      restart: always
+      volumes:
+        - /opt/workspace/nerdcode/docker/data/logs:/logs:rw
+      environment:
+        eureka.client.serviceUrl.defaultZone: http://eureka-service:8761/eureka/
+      ports:
+        # both ports must match the port from external_url above
+        - "8085:8085"
+      depends_on:
+        - "eureka-service"
+        - "api-gateway-service"
+      networks:
+        egrocernetwork:
+          aliases:
+          - shoppingcart-service
+networks:
+  egrocernetwork:
+    name: "egrocernetwork"
+    ipam:
+      driver: default
