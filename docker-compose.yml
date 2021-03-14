@@ -22,7 +22,7 @@ services:
         eureka.client.serviceUrl.defaultZone: http://eureka-service:8761/eureka/
       ports:
         # both ports must match the port from external_url above
-        - "9191:9191"
+        - "80:9191"
       depends_on:
         - "eureka-service"
       networks:
